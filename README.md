@@ -6,33 +6,23 @@ Sistem pemesanan Open PO ringan berbasis HTML, CSS, Vanilla JS, dan Google Sheet
 - 📱 Mobile-first & Sangat Ringan
 - 🛒 Cart System
 - 📝 Auto Kalkulasi
-- 🧾 Auto Invoice Generator
+- 🧾 Auto Invoice Generator (Privat untuk masing-masing pembeli)
 - 🖼️ Export Invoice ke PNG
 - 🗄️ Google Sheets sebagai Database & Backend
-- 📊 **Rekap Harian PO (Daily Report Matrix)**: Matriks pesanan per lokasi/instansi & varian menu, checklist produksi dapur, serta export Excel/Print.
+- 📊 **Rekap Harian PO di Google Sheets (Privat Penjual)**: Otomatis tersusun di Google Spreadsheet per hari, dikelompokkan per lokasi/instansi & varian menu dengan rumus hitung otomatis.
 
-## Cara Menggunakan Rekap Harian (Daily Report)
-Rekap harian dapat dicek melalui **2 Cara**:
+## Rekap Pesanan Harian (Khusus Internal Penjual di Google Sheets)
+Rekapan pesanan **tidak ditampilkan di website umum** demi menjaga privasi data pelanggan (nama, nomor kantor, dan rincian pesanan). Rekapan harian sepenuhnya berada di **Google Spreadsheet Anda**:
 
-### Cara 1: Melalui Halaman Web (`report.html`)
-1. Buka halaman `report.html` di browser (atau klik tombol **"Rekap Harian PO"** di pojok kanan atas `index.html`).
-2. Pilih tanggal pesanan yang ingin dicek menggunakan **Date Picker** (atau klik tombol *Hari Ini* / *Kemarin*).
-3. Anda akan melihat:
-   - **Kartu Statistik**: Total pemesan, total porsi produksi, dan estimasi omset.
-   - **Matriks Rekap Pesanan**: Tabel per pemesan yang dikelompokkan berdasarkan Lokasi/Instansi, kolom varian menu, catatan (misal *FROZEN*), total per pemesan, serta baris *TOTAL*, *HARGA SATUAN*, dan *TOTAL RUPIAH*.
-   - **Checklist Produksi Dapur**: Ringkasan jumlah tiap makanan yang harus dimasak tim dapur.
-4. Fitur tombol:
-   - 🖨️ **Cetak Format Dapur**: Mencetak format landscape siap pakai untuk dapur/kurir.
-   - 📥 **Export Excel**: Mengunduh file `.csv` yang dapat langsung dibuka di Microsoft Excel.
-   - 📊 **Buat di Google Sheets**: Otomatis membuat tab sheet baru di Google Spreadsheet Anda (misal `REKAP_2026-10-28`).
-
-### Cara 2: Langsung di Google Spreadsheet
-1. Buka Google Spreadsheet database pesanan Anda.
-2. Di menu bar atas, klik menu **🍱 DAPUR SIMUN**.
-3. Pilih salah satu:
-   - **📊 Buat Rekap Harian (Hari Ini)**
-   - **📅 Buat Rekap Harian (Pilih Tanggal)...** (masukkan tanggal `YYYY-MM-DD`).
-4. Script akan otomatis menyusun tab sheet baru dengan format tabel, border, warna, rumus `=SUM()`, harga satuan, dan total rupiah persis seperti template matriks PO.
+1. **Otomatis Saat Order Masuk:**
+   Setiap kali ada pesanan masuk dari website, Google Apps Script otomatis membuat atau memperbarui tab sheet untuk hari tersebut (contoh: tab `PO 2026-10-28`).
+2. **Menu Manual di Spreadsheet:**
+   - Di menu bar atas Google Sheets, klik **🍱 DAPUR SIMUN**.
+   - Pilih **📊 Buat Rekap Harian (Hari Ini)** atau **📅 Buat Rekap Harian (Pilih Tanggal)...**.
+3. **Format Rekap di Spreadsheet:**
+   - Dimulai langsung dari Baris 1: `DATA PELANGGAN NO`, `LOKASI`, `NAMA`, [Kolom-kolom Menu], `KET`, `JUMLAH SELURUHNYA`.
+   - Dikelompokkan per Lokasi/Instansi pengantaran.
+   - Baris bawah: Rumus `=SUM()` jumlah item, Harga Satuan, dan Total Omset (Rupiah).
 
 ## Cara Instalasi & Deploy
 

@@ -28,10 +28,6 @@ function doPost(e) {
       return handleGetOrders(postData.pin);
     } else if (postData.action === 'verifyPin') {
       return handleVerifyPin(postData.order_id, postData.pin, postData.target_status);
-    } else if (postData.action === 'getDailyReport') {
-      return handleGetDailyReport(postData.date, postData.pin);
-    } else if (postData.action === 'generateDailyReportSheet') {
-      return handleGenerateDailyReportSheet(postData.date, postData.pin);
     }
     
     return createJsonResponse({ success: false, message: 'Invalid action' });
@@ -51,8 +47,6 @@ function doGet(e) {
     output = handleGetProducts();
   } else if (action === 'getInvoice') {
     output = handleGetInvoice(e.parameter.order_id);
-  } else if (action === 'getDailyReport') {
-    output = handleGetDailyReport(e.parameter.date, e.parameter.pin);
   } else {
     output = createJsonResponse({ success: true, message: 'API is running' });
   }
@@ -474,28 +468,6 @@ function menuGenerateDailyReportCustom() {
       return;
     }
     generateDailyReportSheet(inputDate);
-  }
-}
-
-function handleGetDailyReport(targetDateStr, pin) {
-  try {
-    const reportData = buildDailyReportData(targetDateStr);
-    return createJsonResponse({ success: true, ...reportData });
-  } catch (e) {
-    return createJsonResponse({ success: false, message: e.message });
-  }
-}
-
-function handleGenerateDailyReportSheet(targetDateStr, pin) {
-  try {
-    const sheetName = generateDailyReportSheet(targetDateStr);
-    return createJsonResponse({ 
-      success: true, 
-      message: 'Sheet rekap berhasil dibuat: ' + sheetName,
-      sheet_name: sheetName
-    });
-  } catch (e) {
-    return createJsonResponse({ success: false, message: e.message });
   }
 }
 
