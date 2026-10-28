@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Invoice - DAPUR SIMUN</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&family=Inconsolata:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f3f4f6; }
+        .brand-font { font-family: 'Playfair Display', serif; }
+        .receipt-font { font-family: 'Inconsolata', monospace; }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen p-4 flex flex-col items-center justify-center">
+
+    <div id="loading-state" class="text-center py-20 w-full max-w-md">
+        <i class="fa-solid fa-circle-notch fa-spin text-4xl text-orange-500 mb-4"></i>
+        <p class="font-bold text-gray-600">Mengambil data invoice...</p>
+    </div>
+    
+    <div id="error-state" class="hidden text-center py-10 px-6 bg-white rounded-2xl shadow-sm border border-red-200 w-full max-w-md">
+        <i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 mb-4"></i>
+        <p id="error-msg" class="font-bold text-gray-800"></p>
+        <button onclick="window.location.href='index.html'" class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl transition text-sm">Kembali</button>
+    </div>
+
+    <div id="invoice-wrapper" class="hidden w-full max-w-md flex flex-col items-center">
+        <!-- Printable Receipt Area -->
+        <div id="printable-receipt" class="bg-white text-gray-900 w-full p-6 sm:p-8 shadow-xl rounded-sm receipt-font text-[13px] border border-gray-200 flex flex-col justify-between relative overflow-hidden">
+            <!-- Jagged Top Border -->
+            <div class="absolute top-0 left-0 right-0 h-2 bg-repeat-x" style="background-image: radial-gradient(circle at 5px 0, transparent 6px, #f3f4f6 6px, #f3f4f6 0); background-size: 10px 10px; transform: rotate(180deg);"></div>
+            
+            <div class="mt-2">
+                <div class="text-center pb-4 border-b-2 border-dashed border-gray-300">
+                    <h2 class="font-black text-2xl tracking-wider text-gray-900 brand-font">DAPUR SIMUN</h2>
+                    <p class="text-[11px] text-gray-600 font-bold uppercase mt-0.5">OPEN PO JAJANAN DIAN</p>
+                    <p id="receipt-date" class="text-xs text-gray-500 mt-2 font-mono"></p>
+                    <div class="mt-3 inline-block border border-gray-300 px-3 py-1 bg-gray-50 rounded-sm">
+                        <span class="font-bold text-gray-700">Order ID: </span>
+                        <span id="receipt-id" class="font-black text-gray-900 tracking-wider"></span>
+                    </div>
+                </div>
+
+                <div class="py-4 border-b border-gray-200 space-y-1.5 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-500">Nama:</span><span id="receipt-cust-name" class="font-bold text-gray-800 text-right uppercase"></span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Instansi:</span><span id="receipt-cust-agency" class="font-bold text-gray-800 text-right uppercase"></span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">WhatsApp:</span><span id="receipt-cust-phone" class="font-bold text-gray-800 text-right"></span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Status:</span><span id="receipt-status" class="font-black text-orange-600 text-right uppercase tracking-wider"></span></div>
+                </div>
+
+                <div class="py-4">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-500 border-b border-gray-300 text-[11px] font-bold">
+                                <th class="pb-1">ITEM & VARIAN</th>
+                                <th class="pb-1 text-center">QTY</th>
+                                <th class="pb-1 text-right">TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receipt-items-body" class="divide-y divide-gray-100 text-xs"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t-2 border-dashed border-gray-300 space-y-2 mt-2">
+                <div class="flex justify-between text-xs text-gray-600"><span>Subtotal:</span><span id="receipt-subtotal" class="font-bold text-gray-800"></span></div>
+                <div class="flex justify-between text-xs text-gray-600"><span>Ongkos & Layanan:</span><span id="receipt-fee" class="font-bold text-gray-800"></span></div>
+                <div class="flex justify-between text-sm font-extrabold pt-2 border-t border-gray-200 mt-2"><span>TOTAL BAYAR:</span><span id="receipt-grand-total" class="text-base font-black text-gray-900"></span></div>
+                
+                <div class="mt-8 text-center pt-4 border-t border-gray-200 text-xs text-gray-500">
+                    <p class="font-bold text-amber-800 text-[13px]">Terima Kasih Atas Pesanannya! ❤️</p>
+                    <p class="text-[10px] text-gray-400 mt-1">Simpan struk ini sebagai bukti pesanan valid.</p>
+                </div>
+            </div>
+            
+            <!-- Jagged Bottom Border -->
+            <div class="absolute bottom-0 left-0 right-0 h-2 bg-repeat-x" style="background-image: radial-gradient(circle at 5px 0, transparent 6px, #f3f4f6 6px, #f3f4f6 0); background-size: 10px 10px;"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="w-full mt-6 space-y-3">
+            <button id="btn-download" onclick="downloadReceiptImage()" class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-sm py-3.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download text-lg"></i> Simpan Struk (PNG)
+            </button>
+            <button id="btn-wa" onclick="sendToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-sm py-3.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-xl"></i> Kirim Format ke Admin
+            </button>
+            <button onclick="window.location.href='index.html'" class="w-full bg-white hover:bg-gray-50 text-gray-700 font-bold text-sm py-3 px-4 rounded-xl border border-gray-200 shadow-sm transition flex items-center justify-center gap-2 mt-4">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu
+            </button>
+        </div>
+
+        <!-- Verifikasi Status Pesanan Card (Customer-facing) -->
+        <div id="verify-card" class="w-full mt-6 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-5 shadow-sm mb-6 hidden">
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-sm">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <h4 class="font-extrabold text-sm text-gray-800">Verifikasi Pesanan</h4>
+            </div>
+            <p class="text-xs text-gray-600 mb-3">Sudah konfirmasi ke admin? Masukkan PIN yang Anda dapat dari admin untuk memverifikasi pesanan.</p>
+            
+            <div class="flex flex-col gap-3">
+                <div class="flex gap-2">
+                    <input type="text" id="input-pin" placeholder="Masukkan PIN dari Admin" class="flex-1 px-3 py-2.5 text-xs font-mono font-bold uppercase rounded-xl border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white" />
+                    <button id="btn-verify" onclick="submitPinVerification()" class="bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center gap-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-check"></i> Verifikasi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/config.js?v=9"></script>
+    <script src="assets/js/api.js?v=9"></script>
+    <script src="assets/js/invoice.js?v=9"></script>
+</body>
+</html>

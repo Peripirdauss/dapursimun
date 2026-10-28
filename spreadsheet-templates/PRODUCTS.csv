@@ -1,0 +1,7 @@
+product_id,product_name,unit,description,price,variants,available,sort_order
+P001,Tutut Kuah,bks,Gurih & Berbumbu,10000,"Rasa: Pedas, Original",TRUE,1
+P002,Risol,pcs,Renyah & Beragam Isian,5000,"Rasa: Ayam Pedas, Crabstik, Mayo, Sayur, Matcha, Coklat, Seblak Jadul; Penyajian: Goreng, Frozen",TRUE,2
+P003,Donat Kampung,pcs,Empuk & Manis Pas,2000,"Topping: Coklat, Blubery, Stoberi, Polos",TRUE,3
+P004,Kue Cuhcur,pcs,Manis Gula Merah Original,2000,,TRUE,4
+P005,Kue Bolen,pcs,Lembut & Lumer,3000,,TRUE,5
+P006,Sate Aci Bumbu Kacang,4 tsk,Kenyal & Bumbu Kacang Mantap,5000,,TRUE,6

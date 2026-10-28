@@ -1,0 +1,42 @@
+# DAPUR SIMUN - Form Pemesanan PO
+
+
+# DAPUR SIMUN
+✨ OPEN PO JAJANAN DIAN ✨
+Klik sakelar di tiap menu untuk mengubah status Tersedia / Sold Out.
+
+## Data Pemesan
+Isi data pemesan untuk keperluan konfirmasi
+Nama pemesan wajib diisi!
+Instansi/Kantor wajib diisi!
+
+## Pilih Menu Jajanan
+
+### Tutut Kuah
+Gurih & Berbumbu
+
+### Risol
+Renyah & Beragam Isian
+
+### Donat Kampung
+Empuk & Manis Pas
+
+### Kue Cuhcur
+Manis Gula Merah Original
+
+### Kue Bolen
+Lembut & Lumer
+
+### Sate Aci Bumbu Kacang
+Kenyal & Bumbu Kacang Mantap
+
+## Keranjang Pesanan
+Belum ada item yang dipilih
+Pilih menu di samping untuk menambahkan
+
+### Struk Belanja Pesanan
+
+## DAPUR SIMUN
+OPEN PO JAJANAN DIAN
+Terima Kasih Atas Pesanannya! ❤️
+Dapur Simun - Jajanan Lezat & Fresh
